@@ -23,6 +23,9 @@ namespace HalloOctocat.ViewModel
             get { throw new NotImplementedException(); }
         }
 
-
+        public string ImagePathToDisplay
+        {
+            get { return @"pack://application:,,,/HalloOctocat;component/Images/baracktocat.jpg"; }
+        }
     }
 }

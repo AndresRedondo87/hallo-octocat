@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HalloOctocat.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,12 @@ namespace HalloOctocat
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainViewModel viewModel = new MainViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
