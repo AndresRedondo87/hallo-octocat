@@ -10,6 +10,8 @@
         <Grid>
             <Button x:Name="closeButton" Content="Beenden" HorizontalAlignment="Left" BorderBrush="#F9F2E7" BorderThickness="2" Background="#F9F2E7" Margin="221,231,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
             <Image x:Name="image" Source="{Binding ImageToDisplay}" HorizontalAlignment="Left" Height="196" Margin="152,10,0,0" VerticalAlignment="Top" Width="208"/>
+            <Label x:Name="label" Content="{Binding FoundOctocats}" HorizontalAlignment="Left" Margin="152,273,0,0" VerticalAlignment="Top"/>
+            <Button x:Name="startButton" Content="Start" Command="{Binding StartOctoShow}" HorizontalAlignment="Left" Margin="141,231,0,0" VerticalAlignment="Top" Width="75"/>
         </Grid>
     </Border>
 </Window>
