@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace HalloOctocat.ViewModel
 {
@@ -23,9 +24,12 @@ namespace HalloOctocat.ViewModel
             get { throw new NotImplementedException(); }
         }
 
-        public string ImagePathToDisplay
+        public BitmapImage ImageToDisplay
         {
-            get { return @"pack://application:,,,/HalloOctocat;component/Images/baracktocat.jpg"; }
+            get
+            {
+                return new BitmapImage(new Uri(@"https://octodex.github.com/images/baracktocat.jpg"));
+            }
         }
     }
 }

@@ -9,7 +9,7 @@
     <Border CornerRadius="55" BorderBrush="#F9F2E7" BorderThickness="2" Background="#00A8C6">
         <Grid>
             <Button x:Name="closeButton" Content="Beenden" HorizontalAlignment="Left" BorderBrush="#F9F2E7" BorderThickness="2" Background="#F9F2E7" Margin="221,231,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-            <Image x:Name="image" Source="{Binding ImagePathToDisplay}" HorizontalAlignment="Left" Height="196" Margin="152,10,0,0" VerticalAlignment="Top" Width="208"/>
+            <Image x:Name="image" Source="{Binding ImageToDisplay}" HorizontalAlignment="Left" Height="196" Margin="152,10,0,0" VerticalAlignment="Top" Width="208"/>
         </Grid>
     </Border>
 </Window>
