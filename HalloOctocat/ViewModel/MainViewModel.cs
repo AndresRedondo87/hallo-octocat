@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,9 +12,12 @@ namespace HalloOctocat.ViewModel
 {
     public class MainViewModel : ObservableObject
     {
+
+        private string imagePathOnServer;
+
         public MainViewModel()
         {
-
+            LoadImageFromServer();
         }
 
         /// <summary>
@@ -29,6 +33,19 @@ namespace HalloOctocat.ViewModel
             get
             {
                 return new BitmapImage(new Uri(@"https://octodex.github.com/images/baracktocat.jpg"));
+            }
+        }
+
+        private async void LoadImageFromServer()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(@"https://octodex.github.com/");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                }
             }
         }
     }
