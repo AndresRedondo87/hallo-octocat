@@ -13,13 +13,24 @@ namespace HalloOctocat.ViewModel
 {
     public class MainViewModel : ObservableObject
     {
-        private Dictionary<string, string> octocats = new Dictionary<string, string>();
-        private string imageToDisplayUrl = @"https://octodex.github.com/images/baracktocat.jpg";
+        private Dictionary<string, string> octocatUrls = new Dictionary<string, string>();
+        private Dictionary<string, BitmapImage> octocatImages = new Dictionary<string, BitmapImage>();
+
+        private readonly string imageToDisplayUrl = @"https://octodex.github.com/images/baracktocat.jpg";
+        private readonly string octodexBaseUrl = @"https://octodex.github.com/";
 
         public MainViewModel()
         {
             FoundOctocats = 0;
+            IsOctoShowRunning = false;
+            ImageToDisplay = new BitmapImage(new Uri(imageToDisplayUrl));
+            DetectAllOctocatsInOctodex();
         }
+
+        private RelayCommand startOctoShowCommand;
+        private BitmapImage octocatToDisplay;
+        private int foundOctocats;
+        private bool isOctoShowRunning;
 
         /// <summary>
         /// Starts showing different Octocats from Octodex. Intervall is 3 seconds.
@@ -28,20 +39,32 @@ namespace HalloOctocat.ViewModel
         {
             get
             {
-                return startOctoShowCommand ?? (startOctoShowCommand = new RelayCommand(() => DetectAllOctocatsInOctodex()));
+                return startOctoShowCommand ?? (startOctoShowCommand = new RelayCommand(() => CyclicalyShowRandomOctocat(), () => !this.IsOctoShowRunning));
             }
         }
-        private RelayCommand startOctoShowCommand;
 
+        /// <summary>
+        /// The currently shown Octocat.
+        /// </summary>
         public BitmapImage ImageToDisplay
         {
             get
             {
-                return new BitmapImage(new Uri(imageToDisplayUrl));
+                return octocatToDisplay;
+            }
+            private set
+            {
+                if (octocatToDisplay != value)
+                {
+                    octocatToDisplay = value;
+                    RaisePropertyChanged("ImageToDisplay");
+                }
             }
         }
 
-        private int foundOctocats;
+        /// <summary>
+        /// Indicates how many Octocats were found in the Octodex
+        /// </summary>
         public int FoundOctocats
         {
             get { return foundOctocats; }
@@ -55,11 +78,57 @@ namespace HalloOctocat.ViewModel
             }
         }
 
+        /// <summary>
+        /// Indicates whether cyclically a new Octocat from Octodex is shown.
+        /// </summary>
+        public bool IsOctoShowRunning
+        {
+            get { return isOctoShowRunning; }
+            private set
+            {
+                if (isOctoShowRunning != value)
+                {
+                    isOctoShowRunning = value;
+                    RaisePropertyChanged("IsOctoShowRunning");
+                }
+            }
+        }
+
+        private async Task CyclicalyShowRandomOctocat()
+        {
+            IsOctoShowRunning = true;
+
+            while (IsOctoShowRunning)
+            {
+                ImageToDisplay = RandomlySelectOctocats();
+                await Task.Delay(3000); // <- await with cancellation
+            }
+        }
+
+        private BitmapImage RandomlySelectOctocats()
+        {
+            BitmapImage result;
+            Random rand = new Random();
+            KeyValuePair<string, string> randomOctocatNameUrl = octocatUrls.ElementAt(rand.Next(0, octocatUrls.Count));
+
+            if (octocatImages.ContainsKey(randomOctocatNameUrl.Key))
+            {
+                result = octocatImages[randomOctocatNameUrl.Key];
+            }
+            else
+            {
+                result = new BitmapImage(new Uri(randomOctocatNameUrl.Value));
+                octocatImages.Add(randomOctocatNameUrl.Key, result);
+            }
+
+            return result;
+        }
+
         private async void DetectAllOctocatsInOctodex()
         {
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(@"https://octodex.github.com/");
+                HttpResponseMessage response = await client.GetAsync(octodexBaseUrl);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -72,8 +141,8 @@ namespace HalloOctocat.ViewModel
                     {
                         var name = octocat.Descendants("a").First();
                         var relativeUrl = octocat.Descendants("img").First();
-                        octocats.Add(name.Attributes["name"].Value, relativeUrl.Attributes["data-src"].Value);
-                        FoundOctocats = octocats.Count;
+                        octocatUrls.Add(name.Attributes["name"].Value, octodexBaseUrl + relativeUrl.Attributes["data-src"].Value);
+                        FoundOctocats = octocatUrls.Count;
                     }
                 }
             }
