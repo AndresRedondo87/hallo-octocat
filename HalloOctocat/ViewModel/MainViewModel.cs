@@ -29,6 +29,7 @@ namespace HalloOctocat.ViewModel
 
         private RelayCommand startOctoShowCommand;
         private BitmapImage octocatToDisplay;
+        private string octocatNameToDisplay;
         private int foundOctocats;
         private bool isOctoShowRunning;
 
@@ -58,6 +59,22 @@ namespace HalloOctocat.ViewModel
                 {
                     octocatToDisplay = value;
                     RaisePropertyChanged("ImageToDisplay");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Provides the Name of the currently shown Octocat
+        /// </summary>
+        public string OctocatNameToDisplay
+        {
+            get { return octocatNameToDisplay; }
+            private set
+            {
+                if (octocatNameToDisplay != value)
+                {
+                    octocatNameToDisplay = value;
+                    RaisePropertyChanged("OctocatNameToDisplay");
                 }
             }
         }
@@ -100,25 +117,27 @@ namespace HalloOctocat.ViewModel
 
             while (IsOctoShowRunning)
             {
-                ImageToDisplay = RandomlySelectOctocats();
+                KeyValuePair<string, BitmapImage> octocat = RandomlySelectOctocats();
+                ImageToDisplay = octocat.Value;
+                OctocatNameToDisplay = octocat.Key;
                 await Task.Delay(3000); // <- await with cancellation
             }
         }
 
-        private BitmapImage RandomlySelectOctocats()
+        private KeyValuePair<string, BitmapImage> RandomlySelectOctocats()
         {
-            BitmapImage result;
+            KeyValuePair<string, BitmapImage> result;
             Random rand = new Random();
             KeyValuePair<string, string> randomOctocatNameUrl = octocatUrls.ElementAt(rand.Next(0, octocatUrls.Count));
 
             if (octocatImages.ContainsKey(randomOctocatNameUrl.Key))
             {
-                result = octocatImages[randomOctocatNameUrl.Key];
+                result = new KeyValuePair<string, BitmapImage>(randomOctocatNameUrl.Key, octocatImages[randomOctocatNameUrl.Key]);
             }
             else
             {
-                result = new BitmapImage(new Uri(randomOctocatNameUrl.Value));
-                octocatImages.Add(randomOctocatNameUrl.Key, result);
+                result = new KeyValuePair<string, BitmapImage>(randomOctocatNameUrl.Key, new BitmapImage(new Uri(randomOctocatNameUrl.Value)));
+                octocatImages.Add(result.Key, result.Value);
             }
 
             return result;

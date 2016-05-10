@@ -7,12 +7,13 @@
         mc:Ignorable="d"
         Title="Hallo Octocat by LernMoment" 
         SizeToContent="WidthAndHeight" 
+        WindowStartupLocation="CenterScreen"
         WindowStyle="None" ResizeMode="CanResizeWithGrip" AllowsTransparency="True" Opacity="0.8" Background="{x:Null}">
     <Border CornerRadius="55" BorderBrush="#F9F2E7" BorderThickness="2" Background="#00A8C6">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MaxWidth="400"/>
-                <ColumnDefinition Width="*" MaxWidth="400"/>
+                <ColumnDefinition Width="Auto" MaxWidth="250"/>
+                <ColumnDefinition Width="*" MaxWidth="250"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -22,11 +23,11 @@
             </Grid.RowDefinitions>
 
             <Image x:Name="image" Grid.Row="0" Grid.ColumnSpan="2" Margin="50,50,50,25" Source="{Binding ImageToDisplay}"/>
-            <Label x:Name="labelOctocatName" Grid.Row="1" Grid.ColumnSpan="2" Content="NAME" HorizontalAlignment="Center" Margin="50,10,50,10"/>
+            <Label x:Name="labelOctocatName" Grid.Row="1" Grid.ColumnSpan="2" Content="{Binding OctocatNameToDisplay}" TextElement.Foreground="#F9F2E7" HorizontalAlignment="Center" Margin="50,10,50,10"/>
             <Button x:Name="startButton" Grid.Row="2" Grid.Column="0" Content="Start" Command="{Binding StartOctoShow}" BorderBrush="#F9F2E7" BorderThickness="2" Background="#F9F2E7" Margin="50,10,10,10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Button x:Name="closeButton" Grid.Row="2" Grid.Column="1" Content="Beenden" Click="button_Click" BorderBrush="#F9F2E7" BorderThickness="2" Background="#F9F2E7" Margin="10,10,50,10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label x:Name="labelFoundOctocatsLabel" Grid.Row="3" Grid.Column="0" Content="Gefundene Octocats:" HorizontalAlignment="Center" Margin="50,10,10,10"/>
-            <Label x:Name="labelFoundOctocatsValue" Grid.Row="3" Grid.Column="1" Content="{Binding FoundOctocats}" HorizontalAlignment="Center" Margin="10,10,50,10"/>
+            <Label x:Name="labelFoundOctocatsLabel" Grid.Row="3" Grid.Column="0" Content="Anzahl gefundene Octocats:" TextElement.Foreground="#F9F2E7" HorizontalAlignment="Center" Margin="50,10,10,10"/>
+            <Label x:Name="labelFoundOctocatsValue" Grid.Row="3" Grid.Column="1" Content="{Binding FoundOctocats}" TextElement.Foreground="#F9F2E7" HorizontalAlignment="Center" Margin="10,10,50,10"/>
         </Grid>
     </Border>
 </Window>
