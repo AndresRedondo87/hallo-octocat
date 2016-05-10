@@ -23,7 +23,8 @@ namespace HalloOctocat.ViewModel
         {
             FoundOctocats = 0;
             IsOctoShowRunning = false;
-            ImageToDisplay = new BitmapImage(new Uri(imageToDisplayUrl));
+            OctocatNameToDisplay = "baracktocat";
+            OctocatToDisplay = new BitmapImage(new Uri(imageToDisplayUrl));
             DetectAllOctocatsInOctodex();
         }
 
@@ -47,7 +48,7 @@ namespace HalloOctocat.ViewModel
         /// <summary>
         /// The currently shown Octocat.
         /// </summary>
-        public BitmapImage ImageToDisplay
+        public BitmapImage OctocatToDisplay
         {
             get
             {
@@ -58,7 +59,7 @@ namespace HalloOctocat.ViewModel
                 if (octocatToDisplay != value)
                 {
                     octocatToDisplay = value;
-                    RaisePropertyChanged("ImageToDisplay");
+                    RaisePropertyChanged("OctocatToDisplay");
                 }
             }
         }
@@ -118,7 +119,7 @@ namespace HalloOctocat.ViewModel
             while (IsOctoShowRunning)
             {
                 KeyValuePair<string, BitmapImage> octocat = RandomlySelectOctocats();
-                ImageToDisplay = octocat.Value;
+                OctocatToDisplay = octocat.Value;
                 OctocatNameToDisplay = octocat.Key;
                 await Task.Delay(3000); // <- await with cancellation
             }
